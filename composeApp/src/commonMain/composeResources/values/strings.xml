@@ -1,0 +1,7 @@
+<resources>
+    <!--BottomBar-->
+    <string name="home">Home</string>
+    <string name="finished">Finished</string>
+    <string name="search">Search</string>
+    <string name="settings">Settings</string>
+</resources>
