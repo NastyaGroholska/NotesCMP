@@ -1,17 +1,41 @@
 plugins {
-    id("java-library")
-    alias(libs.plugins.jetbrains.kotlin.jvm)
-}
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-    }
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
 }
 
-dependencies {
-    implementation(libs.kotlinx.coroutines.core)
+kotlin {
+    androidLibrary {
+        namespace = "com.ahrokholska.api"
+        compileSdk = 35
+        minSdk = 24
+    }
+
+    val xcfName = "data:notes:apiKit"
+
+    iosX64 {
+        binaries.framework {
+            baseName = xcfName
+        }
+    }
+
+    iosArm64 {
+        binaries.framework {
+            baseName = xcfName
+        }
+    }
+
+    iosSimulatorArm64 {
+        binaries.framework {
+            baseName = xcfName
+        }
+    }
+
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.coroutines.core)
+            }
+        }
+    }
 }
