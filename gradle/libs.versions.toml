@@ -16,9 +16,11 @@ kotlin = "2.1.10"
 jetbrainsKotlinJvm = "1.9.24"
 kotlinxCoroutinesCore = "1.10.1"
 kotlinStdlib = "2.1.10"
+navigationComposeVersion = "2.8.0-alpha10"
 runner = "1.6.2"
 core = "1.6.1"
 coil = "3.0.4"
+kotlinxSerializationJson = "1.6.3"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -39,6 +41,8 @@ kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", versio
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -48,3 +52,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

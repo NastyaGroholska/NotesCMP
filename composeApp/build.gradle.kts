@@ -31,7 +31,11 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
         }
+
         commonMain.dependencies {
+            implementation(project(":core:note-presentation"))
+            implementation(project(":feature:notes-home"))
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material)
@@ -42,6 +46,9 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
+
+            //Navigation
+            implementation(libs.navigation.compose)
         }
     }
 }
