@@ -80,6 +80,13 @@ kotlin {
                 //Navigation
                 implementation(libs.navigation.compose)
                 implementation(libs.kotlinx.serialization.json)
+
+                //Koin
+                api(project.dependencies.platform(libs.koin.bom))
+                api(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
             }
         }
 

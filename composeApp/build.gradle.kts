@@ -30,9 +30,13 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+
+            //Koin
+            implementation(libs.koin.android)
         }
 
         commonMain.dependencies {
+            implementation(project(":data:notes:api"))
             implementation(project(":core:note-presentation"))
             implementation(project(":feature:notes-home"))
 
@@ -49,6 +53,13 @@ kotlin {
 
             //Navigation
             implementation(libs.navigation.compose)
+
+            //Koin
+            api(project.dependencies.platform(libs.koin.bom))
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose.viewmodel.navigation)
         }
     }
 }

@@ -46,10 +46,11 @@ import notescmp.feature.notes_home.generated.resources.start_your_journey
 import notescmp.feature.notes_home.generated.resources.view_all
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun HomeScreen(
-    viewModel: HomeScreenViewModel,
+    viewModel: HomeScreenViewModel = koinViewModel(),
     onNoteClick: (Int, NoteType) -> Unit,
     onViewAllClick: (NoteType) -> Unit,
     onViewAllPinnedClick: () -> Unit,

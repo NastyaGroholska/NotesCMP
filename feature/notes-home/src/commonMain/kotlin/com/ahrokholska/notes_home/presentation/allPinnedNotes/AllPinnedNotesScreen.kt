@@ -15,10 +15,11 @@ import com.ahrokholska.presentation.TopBarWithTitle
 import notescmp.feature.notes_home.generated.resources.Res
 import notescmp.feature.notes_home.generated.resources.pinned_notes
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 internal fun AllPinnedNotesScreen(
-    viewModel: AllPinnedNotesScreenViewModel,
+    viewModel: AllPinnedNotesScreenViewModel = koinViewModel(),
     onBackClick: () -> Unit,
     onNoteClick: (Int, NoteType) -> Unit
 ) {

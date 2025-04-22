@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 
 internal class AllNotesScreenViewModel(
-    // @Assisted
     type: NoteType,
     getAllNotesUseCase: GetAllNotesUseCase,
 ) : ViewModel() {
