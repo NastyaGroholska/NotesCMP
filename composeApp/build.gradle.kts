@@ -39,6 +39,7 @@ kotlin {
             implementation(project(":data:notes:api"))
             implementation(project(":core:note-presentation"))
             implementation(project(":feature:notes-home"))
+            implementation(project(":data:room"))
 
             implementation(compose.runtime)
             implementation(compose.foundation)
