@@ -15,6 +15,7 @@ kotlin {
         namespace = "com.ahrokholska.notes_home"
         compileSdk = 35
         minSdk = 24
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
 
         withHostTestBuilder {
         }
