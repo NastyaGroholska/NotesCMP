@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 kotlin {
@@ -11,10 +12,19 @@ kotlin {
 // which platforms this KMP module supports.
 // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.ahrokholska.presentation"
-        compileSdk = 35
-        minSdk = 24
+        namespace = "com.ahrokholska.create_note"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
+
+        withHostTestBuilder {
+        }
+
+        withDeviceTestBuilder {
+            sourceSetTreeName = "test"
+        }.configure {
+            instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        }
     }
 
 // For iOS targets, this is also where you should
@@ -24,7 +34,7 @@ kotlin {
 // A step-by-step guide on how to include this library in an XCode
 // project can be found here:
 // https://developer.android.com/kotlin/multiplatform/migrate
-    val xcfName = "core:presentationKit"
+    val xcfName = "feature:create-noteKit"
 
     iosX64 {
         binaries.framework {
@@ -53,20 +63,37 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.stdlib)
+                implementation(project(":data:notes:api"))
+                implementation(project(":core:presentation"))
+                implementation(project(":core:note-presentation"))
+                //implementation(project(":core:presentation-domain-mapper"))
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(compose.ui)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.components.resources)
+
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+
+                //Navigation
+                implementation(libs.navigation.compose)
+                implementation(libs.kotlinx.serialization.json)
+
+                //Koin
+                api(project.dependencies.platform(libs.koin.bom))
+                api(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
             }
         }
 
         androidMain {
             dependencies {
                 implementation(compose.preview)
-                // Add Android-specific dependencies here. Note that this source set depends on
-                // commonMain by default and will correctly pull the Android artifacts of any KMP
-                // dependencies declared in commonMain.
             }
         }
 
@@ -80,4 +107,5 @@ kotlin {
             }
         }
     }
+
 }

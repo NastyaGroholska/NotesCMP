@@ -3,6 +3,9 @@ package com.ahrokholska.notes.presentation
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.ahrokholska.create_note.presentation.createNoteGraph
+import com.ahrokholska.create_note.presentation.navigateToCreateNewNotesGraph
+import com.ahrokholska.create_note.presentation.popCreateNewNotesGraph
 import com.ahrokholska.notes.presentation.common.MainScreenDecoration
 import com.ahrokholska.notes.presentation.common.bottomBar.BottomBarScreen
 import com.ahrokholska.notes_home.presentation.HomeGraph
@@ -19,7 +22,7 @@ fun Navigation() {
             MainScreenDecoration(
                 content = content,
                 currentScreen = BottomBarScreen.HOME,
-                onPlusClick = {},//navController::navigateToCreateNewNotesGraph,
+                onPlusClick = navController::navigateToCreateNewNotesGraph,
                 onScreenClick = {
                     when (it) {
                         BottomBarScreen.HOME -> {}
@@ -30,5 +33,11 @@ fun Navigation() {
                 },
             )
         }
+
+        createNoteGraph(
+            navController = navController,
+            onExit = navController::navigateUp,
+            onNoteSaved = navController::popCreateNewNotesGraph
+        )
     }
 }
