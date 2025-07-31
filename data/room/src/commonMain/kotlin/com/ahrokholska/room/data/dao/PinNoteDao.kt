@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface PinNoteDao {
     @Query("DELETE FROM pinned_notes WHERE note_id = :noteId AND note_type = :type")
-    fun unpinNote(noteId: Int, type: NoteType)
+    suspend fun unpinNote(noteId: Int, type: NoteType)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun pinNote(note: PinnedNoteEntity)
+    suspend fun pinNote(note: PinnedNoteEntity)
 
     @Query("SELECT * FROM pinned_notes ORDER BY time DESC LIMIT 10")
 

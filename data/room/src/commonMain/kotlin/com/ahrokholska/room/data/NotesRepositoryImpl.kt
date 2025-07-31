@@ -13,6 +13,8 @@ import com.ahrokholska.room.data.dao.GuidanceNotesDao
 import com.ahrokholska.room.data.dao.InterestingIdeaNotesDao
 import com.ahrokholska.room.data.dao.PinNoteDao
 import com.ahrokholska.room.data.dao.RoutineTasksNotesDao
+import com.ahrokholska.room.data.entities.FinishedNoteEntity
+import com.ahrokholska.room.di.TransactionProvider
 import com.ahrokholska.room.mapper.toDomain
 import com.ahrokholska.room.mapper.toDomainPreview
 import com.ahrokholska.room.mapper.toEntity
@@ -28,6 +30,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class NotesRepositoryImpl internal constructor(
+    private val transactionProvider: TransactionProvider,
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,
     private val buySomethingNotesDao: BuySomethingNotesDao,
     private val goalsNotesDao: GoalsNotesDao,
@@ -52,27 +55,28 @@ class NotesRepositoryImpl internal constructor(
 
     override suspend fun deleteNote(noteId: Int, noteType: NoteType): Result<Unit> =
         withContext(Dispatchers.IO) {
-            val unpinNote = { pinNoteDao.unpinNote(noteId, noteType) }
-            val deleteFinishedRecord = { finishNoteDao.deleteFinishedRecord(noteId, noteType) }
-            when (noteType) {
-                NoteType.InterestingIdea -> getResult {
-                    interestingIdeaNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
-                }
+            getResult {
+                transactionProvider.startTransaction {
+                    when (noteType) {
+                        NoteType.InterestingIdea ->
+                            interestingIdeaNotesDao.deleteInterestingIdeaNoteOnly(noteId)
 
-                NoteType.BuyingSomething -> getResult {
-                    buySomethingNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
-                }
 
-                NoteType.Goals -> getResult {
-                    goalsNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
-                }
+                        NoteType.BuyingSomething ->
+                            buySomethingNotesDao.deleteBuySomethingNoteOnly(noteId)
 
-                NoteType.Guidance -> getResult {
-                    guidanceNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
-                }
 
-                NoteType.RoutineTasks -> getResult {
-                    routineTasksNotesDao.delete(noteId, unpinNote, deleteFinishedRecord)
+                        NoteType.Goals -> goalsNotesDao.deleteGoalsOnly(noteId)
+
+
+                        NoteType.Guidance -> guidanceNotesDao.deleteGuidanceNoteOnly(noteId)
+
+
+                        NoteType.RoutineTasks -> routineTasksNotesDao.deleteRoutineTasksOnly(noteId)
+
+                    }
+                    pinNoteDao.unpinNote(noteId, noteType)
+                    finishNoteDao.deleteFinishedRecord(noteId, noteType)
                 }
             }
         }
@@ -228,8 +232,11 @@ class NotesRepositoryImpl internal constructor(
 
     override suspend fun finishNote(noteId: Int, noteType: NoteType, time: Long) =
         withContext(Dispatchers.IO) {
-            finishNoteDao.finishNote(noteId, noteType, time) {
+            transactionProvider.startTransaction {
                 pinNoteDao.unpinNote(noteId, noteType)
+                finishNoteDao.insertFinishRecord(
+                    FinishedNoteEntity(noteId, noteType, time)
+                )
             }
         }
 

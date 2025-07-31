@@ -15,30 +15,20 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal abstract class BuySomethingNotesDao {
-    @Transaction
-    open fun delete(
-        noteId: Int, unpinNote: () -> Unit,
-        deleteFinishedRecord: () -> Unit
-    ) {
-        deleteBuySomethingNoteOnly(noteId)
-        unpinNote()
-        deleteFinishedRecord()
-    }
-
     @Query("DELETE FROM buy_something_note WHERE id = :noteId")
-    protected abstract fun deleteBuySomethingNoteOnly(noteId: Int)
+    abstract suspend fun deleteBuySomethingNoteOnly(noteId: Int)
 
     @Insert
-    protected abstract fun insertBuySomethingNoteEntity(note: BuySomethingNoteEntity): Long
+    protected abstract suspend fun insertBuySomethingNoteEntity(note: BuySomethingNoteEntity): Long
 
     @Insert
-    protected abstract fun insertBuySomethingNoteItem(item: BuySomethingNoteItemEntity)
+    protected abstract suspend fun insertBuySomethingNoteItem(item: BuySomethingNoteItemEntity)
 
     @Query("SELECT * FROM buy_something_note WHERE rowid=:rowId")
-    protected abstract fun getBuySomethingNoteByRowId(rowId: Long): BuySomethingNoteEntity
+    protected abstract suspend fun getBuySomethingNoteByRowId(rowId: Long): BuySomethingNoteEntity
 
     @Transaction
-    open fun insert(note: Note.BuyingSomething) {
+    open suspend fun insert(note: Note.BuyingSomething) {
         val rowId = insertBuySomethingNoteEntity(
             BuySomethingNoteEntity(
                 title = note.title
@@ -57,6 +47,7 @@ internal abstract class BuySomethingNotesDao {
         }
     }
 
+    @Transaction
     @Query(
         "SELECT buy_something_note.*" +
                 "FROM buy_something_note " +
@@ -68,6 +59,7 @@ internal abstract class BuySomethingNotesDao {
 
     fun getAllBuySomethingNotes() = getAllBuySomethingNotesGen()
 
+    @Transaction
     @Query(
         "SELECT buy_something_note.*" +
                 "FROM buy_something_note " +
@@ -80,6 +72,7 @@ internal abstract class BuySomethingNotesDao {
 
     fun getLast10BuySomethingNotes() = getLast10BuySomethingNotesGen()
 
+    @Transaction
     @Query(
         "SELECT buy_something_note.*, NOT finished_notes.note_id is NULL as isFinished,NOT pinned_notes.note_id is NULL as isPinned " +
                 "FROM (SELECT buy_something_note.* FROM buy_something_note WHERE buy_something_note.id = :id) buy_something_note " +
@@ -92,9 +85,11 @@ internal abstract class BuySomethingNotesDao {
 
     fun getBuySomethingNoteDetails(id: Int) = getBuySomethingNoteDetailsGen(id)
 
+    @Transaction
     @Query("UPDATE buy_something_note_item SET checked = :checked WHERE note_id = :id AND item_index = :index")
-    abstract fun changeCheck(id: Int, index: Int, checked: Boolean)
+    abstract suspend fun changeCheck(id: Int, index: Int, checked: Boolean)
 
+    @Transaction
     @Query("SELECT * FROM buy_something_note WHERE buy_something_note.id = :id")
     abstract fun getBuySomethingNote(id: Int): Flow<BuySomethingNoteEntityWithItems>
 

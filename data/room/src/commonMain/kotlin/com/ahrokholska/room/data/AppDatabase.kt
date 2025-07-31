@@ -1,7 +1,9 @@
 package com.ahrokholska.room.data
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.RoomDatabaseConstructor
 import com.ahrokholska.room.data.dao.BuySomethingNotesDao
 import com.ahrokholska.room.data.dao.FinishNoteDao
 import com.ahrokholska.room.data.dao.GoalsNotesDao
@@ -19,6 +21,7 @@ import com.ahrokholska.room.data.dao.RoutineTasksNotesDao
     version = 1,
     exportSchema = true,
 )
+@ConstructedBy(AppDatabaseConstructor::class)
 internal abstract class AppDatabase : RoomDatabase() {
     abstract fun interestingIdeaDao(): InterestingIdeaNotesDao
     abstract fun buySomethingNotesDao(): BuySomethingNotesDao
@@ -27,4 +30,9 @@ internal abstract class AppDatabase : RoomDatabase() {
     abstract fun routineTasksNotesDao(): RoutineTasksNotesDao
     abstract fun pinNoteDao(): PinNoteDao
     abstract fun finishNoteDao(): FinishNoteDao
+}
+
+// The Room compiler generates the `actual` implementations.
+internal expect object AppDatabaseConstructor : RoomDatabaseConstructor<AppDatabase> {
+    override fun initialize(): AppDatabase
 }

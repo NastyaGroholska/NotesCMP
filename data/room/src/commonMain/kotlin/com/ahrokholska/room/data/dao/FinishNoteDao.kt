@@ -3,7 +3,6 @@ package com.ahrokholska.room.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
 import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.room.data.entities.FinishedNoteEntity
 import kotlinx.coroutines.flow.Flow
@@ -11,22 +10,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal interface FinishNoteDao {
     @Query("DELETE FROM finished_notes WHERE note_id = :noteId AND note_type = :type")
-    fun deleteFinishedRecord(noteId: Int, type: NoteType)
+    suspend fun deleteFinishedRecord(noteId: Int, type: NoteType)
 
     @Insert
-    fun insertFinishRecord(record: FinishedNoteEntity)
-
-    @Transaction
-    fun finishNote(noteId: Int, type: NoteType, time: Long, unpinNote: () -> Unit) {
-        unpinNote()
-        insertFinishRecord(
-            FinishedNoteEntity(
-                noteId,
-                type,
-                time
-            )
-        )
-    }
+    suspend fun insertFinishRecord(record: FinishedNoteEntity)
 
     @Query("SELECT * FROM finished_notes ORDER BY time")
     fun getAllFinishedNotes(): Flow<List<FinishedNoteEntity>>

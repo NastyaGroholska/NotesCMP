@@ -3,7 +3,6 @@ package com.ahrokholska.room.data.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import androidx.room.Transaction
 import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.room.data.entities.InterestingIdeaNoteEntity
 import com.ahrokholska.room.data.intermediate.InterestingIdeaNoteDetails
@@ -13,21 +12,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 internal abstract class InterestingIdeaNotesDao {
     @Insert
-    abstract fun insert(note: InterestingIdeaNoteEntity)
-
-    @Transaction
-    open fun delete(
-        noteId: Int,
-        unpinNote: () -> Unit,
-        deleteFinishedRecord: () -> Unit
-    ) {
-        deleteInterestingIdeaNoteOnly(noteId)
-        unpinNote()
-        deleteFinishedRecord()
-    }
+    abstract suspend fun insert(note: InterestingIdeaNoteEntity)
 
     @Query("DELETE FROM interesting_idea_note WHERE id = :noteId")
-    protected abstract fun deleteInterestingIdeaNoteOnly(noteId: Int)
+    abstract suspend fun deleteInterestingIdeaNoteOnly(noteId: Int)
 
     @Query(
         "SELECT interesting_idea_note.*" +

@@ -14,6 +14,7 @@ kotlin {
         namespace = "com.ahrokholska.note_presentation"
         compileSdk = 35
         minSdk = 24
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
 // For iOS targets, this is also where you should
