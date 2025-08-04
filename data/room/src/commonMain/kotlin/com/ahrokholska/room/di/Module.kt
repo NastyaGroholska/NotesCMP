@@ -3,6 +3,7 @@ package com.ahrokholska.room.di
 import com.ahrokholska.api.NotesRepository
 import com.ahrokholska.room.data.AppDatabase
 import com.ahrokholska.room.data.NotesRepositoryImpl
+import com.ahrokholska.room.data.TransactionProviderImpl
 import org.koin.core.definition.KoinDefinition
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.bind
@@ -13,6 +14,12 @@ internal expect fun Module.getDatabase(dbName: String): KoinDefinition<AppDataba
 
 val roomModule = module {
     getDatabase("app_database.db")
+
+    single {
+        val db: AppDatabase = get()
+        TransactionProviderImpl(db) as TransactionProvider
+    }
+
     single {
         val db: AppDatabase = get()
         db.pinNoteDao()

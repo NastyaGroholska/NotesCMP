@@ -22,7 +22,7 @@ data object HomeGraph {
     internal data object Home
 
     @Serializable
-    internal data class AllNotes(val type: NoteType)
+    internal data class AllNotes(val type: String)
 
     @Serializable
     internal data object AllPinnedNotes
@@ -39,14 +39,14 @@ fun NavGraphBuilder.homeGraph(
             HomeScreen(
                 decoration = decoration,
                 onNoteClick = onNoteClick,
-                onViewAllClick = { navController.navigate(HomeGraph.AllNotes(it)) },
+                onViewAllClick = { navController.navigate(HomeGraph.AllNotes(it.name)) },
                 onViewAllPinnedClick = { navController.navigate(HomeGraph.AllPinnedNotes) }
             )
         }
 
         composable<HomeGraph.AllNotes> {
             val args = it.toRoute<HomeGraph.AllNotes>()
-            val type = args.type
+            val type = NoteType.valueOf(args.type)
             AllNotesScreen(
                 viewModel = koinViewModel { parametersOf(type) },
                 type = type,

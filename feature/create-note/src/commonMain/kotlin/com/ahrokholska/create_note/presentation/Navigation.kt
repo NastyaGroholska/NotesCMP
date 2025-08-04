@@ -18,7 +18,7 @@ internal data object CreateNewNotesGraph {
     internal data object SelectNoteType
 
     @Serializable
-    internal data class CreateNote(val type: NoteType)
+    internal data class CreateNote(val type: String)
 }
 
 fun NavGraphBuilder.createNoteGraph(
@@ -31,7 +31,7 @@ fun NavGraphBuilder.createNoteGraph(
             SelectNoteTypeScreen(
                 onBackClick = onExit,
                 onTypeClick = {
-                    navController.navigate(CreateNewNotesGraph.CreateNote(it))
+                    navController.navigate(CreateNewNotesGraph.CreateNote(it.name))
                 }
             )
         }
@@ -39,7 +39,7 @@ fun NavGraphBuilder.createNoteGraph(
         composable<CreateNewNotesGraph.CreateNote> {
             val args = it.toRoute<CreateNewNotesGraph.CreateNote>()
             CreateNoteScreen(
-                type = args.type,
+                type = NoteType.valueOf(args.type),
                 onBackClick = navController::navigateUp,
                 onNoteSaved = onNoteSaved
             )

@@ -16,33 +16,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 internal abstract class GoalsNotesDao {
-    @Transaction
-    open fun delete(
-        noteId: Int, unpinNote: () -> Unit,
-        deleteFinishedRecord: () -> Unit
-    ) {
-        deleteGoalsOnly(noteId)
-        unpinNote()
-        deleteFinishedRecord()
-    }
-
     @Query("DELETE FROM goals_note WHERE id = :noteId")
-    protected abstract fun deleteGoalsOnly(noteId: Int)
+    abstract suspend fun deleteGoalsOnly(noteId: Int)
 
     @Insert
-    protected abstract fun insertGoalsNoteEntity(note: GoalsNoteEntity): Long
+    protected abstract suspend fun insertGoalsNoteEntity(note: GoalsNoteEntity): Long
 
     @Query("SELECT * FROM goals_note WHERE rowid=:rowId")
-    protected abstract fun getGoalsNoteEntityByRowId(rowId: Long): GoalsNoteEntity
+    protected abstract suspend fun getGoalsNoteEntityByRowId(rowId: Long): GoalsNoteEntity
 
     @Insert
-    protected abstract fun insertGoalsNoteTaskEntity(task: GoalsNoteTaskEntity)
+    protected abstract suspend fun insertGoalsNoteTaskEntity(task: GoalsNoteTaskEntity)
 
     @Insert
-    protected abstract fun insertGoalsNoteSubtaskEntity(subtask: GoalsNoteSubtaskEntity)
+    protected abstract suspend fun insertGoalsNoteSubtaskEntity(subtask: GoalsNoteSubtaskEntity)
 
     @Transaction
-    open fun insert(note: Note.Goals) {
+    open suspend fun insert(note: Note.Goals) {
         val rowId = insertGoalsNoteEntity(GoalsNoteEntity(title = note.title))
         val goalsNote = getGoalsNoteEntityByRowId(rowId)
         note.tasks.forEachIndexed { taskIndex, task ->
@@ -125,10 +115,10 @@ internal abstract class GoalsNotesDao {
     fun getGoalsNoteDetails(id: Int) = getGoalsNoteDetailsGen(id)
 
     @Query("UPDATE goals_note_task SET checked = :checked WHERE note_id = :id AND task_index = :index")
-    abstract fun changeTaskCheck(id: Int, index: Int, checked: Boolean)
+    abstract suspend fun changeTaskCheck(id: Int, index: Int, checked: Boolean)
 
     @Query("UPDATE goals_note_subtask SET checked = :checked WHERE note_id = :id AND task_index = :taskIndex AND subtask_index = :subtaskIndex")
-    abstract fun changeSubtaskCheck(id: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean)
+    abstract suspend fun changeSubtaskCheck(id: Int, taskIndex: Int, subtaskIndex: Int, checked: Boolean)
 
     @Query(
         "SELECT goals_note.*, goals_note_task.task_index, goals_note_task.checked as task_checked, goals_note_task.text as task_text," +

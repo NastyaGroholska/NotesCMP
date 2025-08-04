@@ -1,5 +1,5 @@
 [versions]
-agp = "8.9.3"
+agp = "8.11.1"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -17,7 +17,7 @@ kotlin = "2.2.0"
 jetbrainsKotlinJvm = "2.2.0"
 kotlinxCoroutinesCore = "1.10.2"
 kotlinStdlib = "2.2.0"
-navigationComposeVersion = "2.8.0-alpha13"
+navigationComposeVersion = "2.9.0-beta03"
 runner = "1.6.2"
 core = "1.6.1"
 coil = "3.3.0"
@@ -54,7 +54,6 @@ coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-room-runtime-android = { module = "androidx.room:room-runtime-android", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 
