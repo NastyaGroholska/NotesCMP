@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class NotesRepositoryImpl internal constructor(
+internal class NotesRepositoryImpl internal constructor(
     private val transactionProvider: TransactionProvider,
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,
     private val buySomethingNotesDao: BuySomethingNotesDao,

@@ -1,5 +1,5 @@
 package com.ahrokholska.room.di
 
-interface TransactionProvider {
+internal interface TransactionProvider {
     suspend fun startTransaction(block: suspend () -> Unit)
 }
