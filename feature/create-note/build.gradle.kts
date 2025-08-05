@@ -66,7 +66,6 @@ kotlin {
                 implementation(project(":data:notes:api"))
                 implementation(project(":core:presentation"))
                 implementation(project(":core:note-presentation"))
-                //implementation(project(":core:presentation-domain-mapper"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -88,6 +87,9 @@ kotlin {
                 implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.compose.viewmodel.navigation)
+
+                //Permissions
+                implementation("com.mohamedrejeb.calf:calf-permissions:0.8.0")
             }
         }
 
