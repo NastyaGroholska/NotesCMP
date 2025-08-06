@@ -1,0 +1,5 @@
+<resources>
+    <!--Dialog-->
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+</resources>

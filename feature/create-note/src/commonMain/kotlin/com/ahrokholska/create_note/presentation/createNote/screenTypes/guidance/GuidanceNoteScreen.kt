@@ -18,18 +18,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,18 +30,16 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.BottomBarSave
 import com.ahrokholska.note_presentation.composable.GuidanceImage
+import com.ahrokholska.permission.Permission
+import com.ahrokholska.permission.rememberPermissionHandler
 import com.ahrokholska.presentation.TopBar
-import com.mohamedrejeb.calf.permissions.ExperimentalPermissionsApi
-import com.mohamedrejeb.calf.permissions.Permission
-import com.mohamedrejeb.calf.permissions.isGranted
-import com.mohamedrejeb.calf.permissions.rememberPermissionState
 import notescmp.feature.create_note.generated.resources.Res
+import notescmp.feature.create_note.generated.resources.gallery_rational
 import notescmp.feature.create_note.generated.resources.guidance_title
 import notescmp.feature.create_note.generated.resources.your_guidance
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 internal fun GuidanceNoteScreen(
     viewModel: GuidanceNoteScreenViewModel = koinViewModel(),
@@ -62,34 +53,13 @@ internal fun GuidanceNoteScreen(
             }
         }*/
 
-    var showDialog by remember { mutableStateOf(false) }
+    val permState = rememberPermissionHandler(
+        permission = Permission.Gallery,
+        rational = stringResource(Res.string.gallery_rational),
+        onPermissionGranted = {
+            //open gal
+        })
 
-    val permState = rememberPermissionState(Permission.Gallery) { isGranted ->
-        if (!isGranted) {
-            showDialog = true
-        } else {
-            //open gallery
-        }
-    }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    permState.openAppSettings()
-                    showDialog = false
-                }) {
-                    Text("Confirm")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
-                    Text("Dismiss")
-                }
-            },
-            text = { Text("Unable to change picture without access to gallery") })
-    }
     GuidanceNoteScreenContent(
         title = viewModel.title.collectAsState().value,
         body = viewModel.body.collectAsState().value,
@@ -100,7 +70,7 @@ internal fun GuidanceNoteScreen(
         onChangeImageClick = {
             // pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-            if (permState.status.isGranted) {
+            if (permState.isGranted) {
                 //open gal
             } else {
                 permState.launchPermissionRequest()
