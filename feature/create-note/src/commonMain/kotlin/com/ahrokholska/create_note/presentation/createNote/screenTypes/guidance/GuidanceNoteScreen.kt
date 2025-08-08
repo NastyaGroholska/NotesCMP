@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.BottomBarSave
+import com.ahrokholska.create_note.rememberGalleryManager
 import com.ahrokholska.note_presentation.composable.GuidanceImage
 import com.ahrokholska.permission.Permission
 import com.ahrokholska.permission.rememberPermissionHandler
@@ -46,19 +47,15 @@ internal fun GuidanceNoteScreen(
     onBackClick: () -> Unit,
     onNoteSaved: () -> Unit
 ) {
-    /*val pickMedia =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            uri?.let {
-                viewModel.changeImage(uri.toString())
-            }
-        }*/
+    val galleryManager = rememberGalleryManager { uri ->
+        viewModel.changeImage(uri)
+    }
 
     val permState = rememberPermissionHandler(
         permission = Permission.Gallery,
         rational = stringResource(Res.string.gallery_rational),
-        onPermissionGranted = {
-            //open gal
-        })
+        onPermissionGranted = galleryManager::launch
+    )
 
     GuidanceNoteScreenContent(
         title = viewModel.title.collectAsState().value,
@@ -68,10 +65,8 @@ internal fun GuidanceNoteScreen(
         onBodyChange = viewModel::changeBody,
         onBackClick = onBackClick,
         onChangeImageClick = {
-            // pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-
             if (permState.isGranted) {
-                //open gal
+                galleryManager.launch()
             } else {
                 permState.launchPermissionRequest()
             }
