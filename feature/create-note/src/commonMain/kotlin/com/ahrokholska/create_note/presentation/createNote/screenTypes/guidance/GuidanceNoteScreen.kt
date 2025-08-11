@@ -29,7 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.BottomBarSave
-import com.ahrokholska.create_note.rememberGalleryManager
+import com.ahrokholska.gallery.rememberGalleryManager
 import com.ahrokholska.note_presentation.composable.GuidanceImage
 import com.ahrokholska.permission.Permission
 import com.ahrokholska.permission.rememberPermissionHandler

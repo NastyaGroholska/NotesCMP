@@ -1,4 +1,4 @@
-package com.ahrokholska.create_note
+package com.ahrokholska.gallery
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest

@@ -1,4 +1,4 @@
-package com.ahrokholska.create_note
+package com.ahrokholska.gallery
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

@@ -67,6 +67,7 @@ kotlin {
                 implementation(project(":core:presentation"))
                 implementation(project(":core:note-presentation"))
                 implementation(project(":core:permission"))
+                implementation(project(":core:gallery"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
