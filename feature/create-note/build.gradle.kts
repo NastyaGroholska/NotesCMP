@@ -95,6 +95,10 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(compose.preview)
+
+                //WorkManager
+                implementation(libs.androidx.work.runtime.ktx)
+                implementation(libs.koin.workmanager)
             }
         }
 

@@ -33,6 +33,10 @@ kotlin {
 
             //Koin
             implementation(libs.koin.android)
+
+            //WorkManager
+            implementation(libs.androidx.work.runtime.ktx)
+            api(libs.koin.workmanager)
         }
 
         commonMain.dependencies {

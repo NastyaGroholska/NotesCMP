@@ -7,11 +7,14 @@ import com.ahrokholska.create_note.presentation.createNote.screenTypes.goal.Goal
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.guidance.GuidanceNoteScreenViewModel
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.idea.InterestingIdeaNoteScreenViewModel
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.routine.RoutineTasksNoteScreenViewModel
+import org.koin.core.module.Module
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
+expect val platformModule: Module
 val createNoteModule = module {
+    includes(platformModule)
     factoryOf(::SaveNoteUseCase)
     factoryOf(::CopyAndUpdateImageUseCase)
 
