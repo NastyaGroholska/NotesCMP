@@ -1,6 +1,6 @@
-package com.ahrokholska.create_note.domain.useCase
+package com.ahrokholska.copy_image.domain.useCase
 
-internal class CopyAndUpdateImageUseCase(private val copier: Copier) {
+class CopyAndUpdateImageUseCase(private val copier: Copier) {
     operator fun invoke(uri: String) {
         copier.doWork(uri)
     }

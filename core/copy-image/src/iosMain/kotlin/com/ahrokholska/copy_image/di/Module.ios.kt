@@ -1,6 +1,6 @@
-package com.ahrokholska.create_note.di
+package com.ahrokholska.copy_image.di
 
-import com.ahrokholska.create_note.domain.useCase.Copier
+import com.ahrokholska.copy_image.domain.useCase.Copier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.module.Module

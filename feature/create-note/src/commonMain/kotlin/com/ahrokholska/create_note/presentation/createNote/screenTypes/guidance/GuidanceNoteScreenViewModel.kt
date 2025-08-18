@@ -2,7 +2,7 @@ package com.ahrokholska.create_note.presentation.createNote.screenTypes.guidance
 
 import androidx.lifecycle.viewModelScope
 import com.ahrokholska.api.model.Note
-import com.ahrokholska.create_note.domain.useCase.CopyAndUpdateImageUseCase
+import com.ahrokholska.copy_image.domain.useCase.CopyAndUpdateImageUseCase
 import com.ahrokholska.create_note.domain.useCase.SaveNoteUseCase
 import com.ahrokholska.create_note.presentation.createNote.screenTypes.NoteWithTitleViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

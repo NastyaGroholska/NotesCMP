@@ -68,6 +68,7 @@ kotlin {
                 implementation(project(":core:note-presentation"))
                 implementation(project(":core:permission"))
                 implementation(project(":core:gallery"))
+                implementation(project(":core:copy-image"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -95,10 +96,6 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(compose.preview)
-
-                //WorkManager
-                implementation(libs.androidx.work.runtime.ktx)
-                implementation(libs.koin.workmanager)
             }
         }
 

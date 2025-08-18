@@ -1,4 +1,4 @@
-package com.ahrokholska.create_note.domain.useCase
+package com.ahrokholska.copy_image.domain.useCase
 
 import com.ahrokholska.api.NotesRepository
 import kotlinx.cinterop.ExperimentalForeignApi

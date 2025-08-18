@@ -1,8 +1,8 @@
-package com.ahrokholska.create_note.di
+package com.ahrokholska.copy_image.di
 
 import androidx.work.WorkManager
-import com.ahrokholska.create_note.data.CopyImageWorker
-import com.ahrokholska.create_note.domain.useCase.Copier
+import com.ahrokholska.copy_image.data.CopyImageWorker
+import com.ahrokholska.copy_image.domain.useCase.Copier
 import kotlinx.coroutines.Dispatchers
 import org.koin.androidx.workmanager.dsl.worker
 import org.koin.core.module.Module

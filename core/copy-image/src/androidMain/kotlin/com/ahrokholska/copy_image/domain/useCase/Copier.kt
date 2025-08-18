@@ -1,9 +1,9 @@
-package com.ahrokholska.create_note.domain.useCase
+package com.ahrokholska.copy_image.domain.useCase
 
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.ahrokholska.create_note.data.CopyImageWorker
+import com.ahrokholska.copy_image.data.CopyImageWorker
 
 actual class Copier(private val workManager: WorkManager) {
     actual fun doWork(uri: String) {

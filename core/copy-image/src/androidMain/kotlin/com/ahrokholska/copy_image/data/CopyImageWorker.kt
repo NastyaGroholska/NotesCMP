@@ -1,4 +1,4 @@
-package com.ahrokholska.create_note.data
+package com.ahrokholska.copy_image.data
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-class CopyImageWorker(
+internal class CopyImageWorker(
     private val repository: NotesRepository,
     private val ioDispatcher: CoroutineDispatcher,
     private val appContext: Context,
