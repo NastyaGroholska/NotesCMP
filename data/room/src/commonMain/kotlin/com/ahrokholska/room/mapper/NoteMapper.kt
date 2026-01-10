@@ -1,7 +1,7 @@
 package com.ahrokholska.room.mapper
 
 import com.ahrokholska.api.model.Note
-import com.ahrokholska.api.model.NotePreview
+import com.ahrokholska.api.model.NoteCompact
 import com.ahrokholska.room.data.entities.GoalsNoteEntity
 import com.ahrokholska.room.data.entities.GuidanceNoteEntity
 import com.ahrokholska.room.data.entities.InterestingIdeaNoteEntity
@@ -39,20 +39,20 @@ internal fun InterestingIdeaNoteEntity.toDomain(isFinished: Boolean, isPinned: B
     )
 
 internal fun InterestingIdeaNoteEntity.toDomainPreview() =
-    NotePreview.InterestingIdea(
+    NoteCompact.InterestingIdea(
         id = id,
         title = title,
         body = body
     )
 
-internal fun BuySomethingNoteEntityWithItems.toDomainPreview() = NotePreview.BuyingSomething(
+internal fun BuySomethingNoteEntityWithItems.toDomainPreview() = NoteCompact.BuyingSomething(
     id = note.id,
     title = note.title,
     items = items.map { it.checked to it.text }
 )
 
-internal fun Map.Entry<GoalsNoteEntity, List<TaskAndSubtask>>.toDomainPreview(): NotePreview.Goals =
-    NotePreview.Goals(
+internal fun Map.Entry<GoalsNoteEntity, List<TaskAndSubtask>>.toDomainPreview(): NoteCompact.Goals =
+    NoteCompact.Goals(
         id = key.id,
         title = key.title,
         tasks = value.toDomain()
@@ -89,16 +89,16 @@ private fun List<TaskAndSubtask>.toDomain(): List<Pair<Note.Goals.Task, List<Not
     return tasks
 }
 
-internal fun GuidanceNoteEntity.toDomainPreview() = NotePreview.Guidance(
+internal fun GuidanceNoteEntity.toDomainPreview() = NoteCompact.Guidance(
     id = id,
     title = title,
     body = body,
     image = image
 )
 
-internal fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NotePreview.RoutineTasks {
+internal fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NoteCompact.RoutineTasks {
     val pair = subNotes.toActiveAndCompleted()
-    return NotePreview.RoutineTasks(
+    return NoteCompact.RoutineTasks(
         id = note.id,
         active = pair.first,
         completed = pair.second

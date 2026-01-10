@@ -2,7 +2,7 @@ package com.ahrokholska.room.data
 
 import com.ahrokholska.api.NotesRepository
 import com.ahrokholska.api.model.Note
-import com.ahrokholska.api.model.NotePreview
+import com.ahrokholska.api.model.NoteCompact
 import com.ahrokholska.api.model.NoteTitle
 import com.ahrokholska.api.model.NoteType
 import com.ahrokholska.result.ResultUtils.getResult
@@ -81,55 +81,56 @@ internal class NotesRepositoryImpl internal constructor(
             }
         }
 
-    override fun getAllInterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>> =
-        interestingIdeaNotesDao.getAllInterestingIdeaNotes().map { list ->
-            list.map { it.toDomainPreview() }
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : NoteCompact> getAllNotes(note: T): Flow<List<T>> = when (note) {
+        is NoteCompact.BuyingSomething -> buySomethingNotesDao.getAllBuySomethingNotes()
+            .map { list ->
+                list.map { it.toDomainPreview() as T }
+            }
+
+        is NoteCompact.Goals -> goalsNotesDao.getAllGoalsNotes().map { map ->
+            map.map { it.toDomainPreview() as T }
         }
 
-    override fun getLast10InterestingIdeaNotes(): Flow<List<NotePreview.InterestingIdea>> =
-        interestingIdeaNotesDao.getLast10InterestingIdeaNotes().map { list ->
-            list.map { it.toDomainPreview() }
+        is NoteCompact.Guidance -> guidanceNotesDao.getAllGuidanceNotes().map { list ->
+            list.map { it.toDomainPreview() as T }
         }
 
-    override fun getAllBuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>> =
-        buySomethingNotesDao.getAllBuySomethingNotes().map { list ->
-            list.map { it.toDomainPreview() }
+        is NoteCompact.InterestingIdea -> interestingIdeaNotesDao.getAllInterestingIdeaNotes()
+            .map { list ->
+                list.map { it.toDomainPreview() as T }
+            }
+
+        is NoteCompact.RoutineTasks -> routineTasksNotesDao.getAllRoutineTasksNotes().map { list ->
+            list.map { it.toDomainPreview() as T }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : NoteCompact> getLast10Notes(note: T): Flow<List<T>> = when (note) {
+        is NoteCompact.BuyingSomething -> buySomethingNotesDao.getLast10BuySomethingNotes()
+            .map { list ->
+                list.map { it.toDomainPreview() as T }
+            }
+
+        is NoteCompact.Goals -> goalsNotesDao.getLast10GoalsNotes().map { map ->
+            map.map { mapEntry -> mapEntry.toDomainPreview() as T }
         }
 
-    override fun getLast10BuySomethingNotes(): Flow<List<NotePreview.BuyingSomething>> =
-        buySomethingNotesDao.getLast10BuySomethingNotes().map { list ->
-            list.map { it.toDomainPreview() }
+        is NoteCompact.Guidance -> guidanceNotesDao.getLast10GuidanceNotes().map { list ->
+            list.map { it.toDomainPreview() as T }
         }
 
-    override fun getAllGoalsNotes(): Flow<List<NotePreview.Goals>> =
-        goalsNotesDao.getAllGoalsNotes().map { map ->
-            map.map { mapEntry -> mapEntry.toDomainPreview() }
-        }
+        is NoteCompact.InterestingIdea -> interestingIdeaNotesDao.getLast10InterestingIdeaNotes()
+            .map { list ->
+                list.map { it.toDomainPreview() as T }
+            }
 
-    override fun getLast10GoalsNotes(): Flow<List<NotePreview.Goals>> =
-        goalsNotesDao.getLast10GoalsNotes().map { map ->
-            map.map { mapEntry -> mapEntry.toDomainPreview() }
-        }
-
-    override fun getAllGuidanceNotes(): Flow<List<NotePreview.Guidance>> =
-        guidanceNotesDao.getAllGuidanceNotes().map { list ->
-            list.map { it.toDomainPreview() }
-        }
-
-    override fun getLast10GuidanceNotes(): Flow<List<NotePreview.Guidance>> =
-        guidanceNotesDao.getLast10GuidanceNotes().map { list ->
-            list.map { it.toDomainPreview() }
-        }
-
-    override fun getAllRoutineTasksNotes(): Flow<List<NotePreview.RoutineTasks>> =
-        routineTasksNotesDao.getAllRoutineTasksNotes().map { list ->
-            list.map { it.toDomainPreview() }
-        }
-
-    override fun getLast10RoutineTasksNotes(): Flow<List<NotePreview.RoutineTasks>> =
-        routineTasksNotesDao.getLast10RoutineTasksNotes().map { list ->
-            list.map { it.toDomainPreview() }
-        }
+        is NoteCompact.RoutineTasks -> routineTasksNotesDao.getLast10RoutineTasksNotes()
+            .map { list ->
+                list.map { it.toDomainPreview() as T }
+            }
+    }
 
     override fun getInterestingIdeaNoteDetails(noteId: Int): Flow<Note.InterestingIdea?> =
         interestingIdeaNotesDao.getInterestingIdeaNoteDetails(noteId).map { it?.toNote() }
@@ -174,7 +175,7 @@ internal class NotesRepositoryImpl internal constructor(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getLast10PinnedNotes(): Flow<List<NotePreview>> =
+    override fun getLast10PinnedNotes(): Flow<List<NoteCompact>> =
         pinNoteDao.getLast10PinnedNotes().flatMapLatest { list ->
             if (list.isEmpty()) {
                 flowOf(listOf())
@@ -184,7 +185,7 @@ internal class NotesRepositoryImpl internal constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getAllPinnedNotes(): Flow<List<NotePreview>> =
+    override fun getAllPinnedNotes(): Flow<List<NoteCompact>> =
         pinNoteDao.getAllPinnedNotes().flatMapLatest { list ->
             if (list.isEmpty()) {
                 flowOf(listOf())
@@ -241,7 +242,7 @@ internal class NotesRepositoryImpl internal constructor(
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun getAllFinishedNotes(): Flow<List<NotePreview>> =
+    override fun getAllFinishedNotes(): Flow<List<NoteCompact>> =
         finishNoteDao.getAllFinishedNotes().flatMapLatest { list ->
             if (list.isEmpty()) {
                 flowOf(listOf())
