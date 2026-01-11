@@ -33,7 +33,7 @@ actual class Copier(
                         create = true,
                         error = null
                     )
-                    val fileName = "${Clock.System.now().toEpochMilliseconds()}${url.pathExtension}"
+                    val fileName = "${Clock.System.now().toEpochMilliseconds()}.${url.pathExtension}"
                     var newURL = directoryURL?.URLByAppendingPathComponent(
                         pathComponent = "$IMAGE_PATH/"
                     ) ?: throw Exception("Unable to create dir URL")

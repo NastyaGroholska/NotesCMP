@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,6 +35,7 @@ import com.ahrokholska.note_presentation.composable.GuidanceImage
 import com.ahrokholska.permission.Permission
 import com.ahrokholska.permission.rememberPermissionHandler
 import com.ahrokholska.presentation.TopBar
+import kotlinx.coroutines.launch
 import notescmp.feature.create_note.generated.resources.Res
 import notescmp.feature.create_note.generated.resources.gallery_rational
 import notescmp.feature.create_note.generated.resources.guidance_title
@@ -51,10 +53,16 @@ internal fun GuidanceNoteScreen(
         viewModel.changeImage(uri)
     }
 
+    val scope = rememberCoroutineScope()
+
     val permState = rememberPermissionHandler(
         permission = Permission.Gallery,
         rational = stringResource(Res.string.gallery_rational),
-        onPermissionGranted = galleryManager::launch
+        onPermissionGranted = {
+            scope.launch {
+                galleryManager.launch()
+            }
+        }
     )
 
     GuidanceNoteScreenContent(
@@ -66,7 +74,9 @@ internal fun GuidanceNoteScreen(
         onBackClick = onBackClick,
         onChangeImageClick = {
             if (permState.isGranted) {
-                galleryManager.launch()
+                scope.launch {
+                    galleryManager.launch()
+                }
             } else {
                 permState.launchPermissionRequest()
             }

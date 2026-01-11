@@ -93,8 +93,10 @@ internal fun GuidanceNoteEntity.toDomainPreview() = NoteCompact.Guidance(
     id = id,
     title = title,
     body = body,
-    image = image
+    image = image.toFilePath()
 )
+
+expect fun String.toFilePath(): String
 
 internal fun RoutineTasksNoteEntityWithSubNotes.toDomainPreview(): NoteCompact.RoutineTasks {
     val pair = subNotes.toActiveAndCompleted()
