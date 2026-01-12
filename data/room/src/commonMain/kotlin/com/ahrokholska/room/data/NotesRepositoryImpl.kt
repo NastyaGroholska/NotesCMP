@@ -28,7 +28,9 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import org.koin.core.annotation.Single
 
+@Single
 internal class NotesRepositoryImpl internal constructor(
     private val transactionProvider: TransactionProvider,
     private val interestingIdeaNotesDao: InterestingIdeaNotesDao,

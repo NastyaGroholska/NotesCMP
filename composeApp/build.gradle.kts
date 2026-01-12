@@ -45,6 +45,7 @@ kotlin {
             implementation(project(":feature:notes-home"))
             implementation(project(":data:room"))
             implementation(project(":feature:create-note"))
+            implementation(project(":core:di-utils"))
 
             implementation(compose.runtime)
             implementation(compose.foundation)

@@ -1,24 +1,22 @@
+@file:Suppress("EXPECT_ACTUAL_CLASSIFIERS_ARE_IN_BETA_WARNING")
+
 package com.ahrokholska.room.di
 
 import androidx.room.Room
-import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.ahrokholska.room.data.AppDatabase
+import com.android.di_utils.ContextWrapper
 import kotlinx.cinterop.ExperimentalForeignApi
-import org.koin.core.definition.KoinDefinition
-import org.koin.core.module.Module
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
-internal actual fun Module.getDatabase(dbName: String): KoinDefinition<AppDatabase> =
-    single {
+internal actual fun ContextWrapper.getDatabaseProvider() = object : DatabaseProvider {
+    override fun getDatabase(dbName: String): AppDatabase =
         Room.databaseBuilder<AppDatabase>(
             name = documentDirectory() + "/" + dbName
-        )
-            .setDriver(BundledSQLiteDriver())
+        ).setDriver(androidx.sqlite.driver.bundled.BundledSQLiteDriver())
             .build()
-
-    }
+}
 
 @OptIn(ExperimentalForeignApi::class)
 private fun documentDirectory(): String {
